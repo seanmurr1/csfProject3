@@ -34,11 +34,19 @@ class Cache {
 	public:
 		// Constructor
 		Cache(int sets, int blocks, int bytes, bool writeAl, bool writeTh, bool lru);
+		
 		// Destructor (not sure if needed, but maybe for vectors)
 		~Cache();		
 
 		// Probably have a load function (what will parameter be)
 		void load(uint32_t address);
+
+		// load for FIFO
+
+		// load for LRU
+
+		// method to handle eviction
+
 		// Probably have a store function
 		void store(uint32_t address);
 

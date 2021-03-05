@@ -17,6 +17,8 @@ class Set {
 	// Destructor
 	~Set();
 
+	// could use a tuple (int, bool)
+
 	// Nested class to represent a block
 	class Block {
 		int order;	// Keep track of order based on FIFO or LRU
