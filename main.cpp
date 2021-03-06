@@ -13,7 +13,7 @@
 #include "Cache.h"
 // take in command line arguments
 
-// check if they're valid (help function)
+// check if they're valid (helper functions)
     // example FIFO or LRU else invalid (exit with warning)
     // same idea with values (power of 2 etc)
 
@@ -35,7 +35,7 @@ int main (int argc, char * argv[]) {
     int numSets;
     int numBlocks;
     int numBytes;
-    //
+    // const chars for the rest of the arguments? then set booleans when checking if valid?
     const char *tracefile;      // need to check if tracefiles works in the same way
     if (argc < 9) {     // might be 8 depending on '<'
         std::cerr << "Error: Missing arguments" << std::endl;
