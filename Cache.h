@@ -26,8 +26,8 @@ class Cache {
 		// Vector of sets
 		std::vector<Set> sets;			
 		// Parameters for specific behavior 
-		bool write-allocate;	// If false, then no-write-allocate
-		bool write-through;	// If false, then write-back
+		bool writeAllocate;	// If false, then no-write-allocate
+		bool writeThrough;	// If false, then write-back
 		bool lru;		// If false, then fifo
 
 	// Public functions
