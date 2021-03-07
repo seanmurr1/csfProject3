@@ -29,3 +29,38 @@ Cache::Cache(int sets, int blocks, int bytes, bool writeAl, bool writeTh, bool l
 Cache::~Cache() {
 
 }
+
+// Loads address. TODO need to deal with cycle data, probably pass by reference into other load
+void Cache::load(uint32_t address) {
+	int indexBits;
+	int offsetBits;
+	int tagBits;
+	// Obtain address bit information
+	obtainAddressBits(address, offsetBits, indexBits, tagBits);	
+	
+	// Loading to set in question
+	bool hit = sets[indexBits].load(offsetBits, tagBits, cycles);
+
+	// Updating statistics
+	if (hit) {
+		lHits++;
+	} else {
+		lMisses++;
+	}
+	loads++;
+}
+
+void Cache::obtainAddressBits(uint32_t, address, int &offsetBits, int &indexBits, int &tagBits) {
+	// Case: Fully-Associative
+	if (index == 0) {
+		indexBits = 0;
+		offsetBits = address & ~(~0U << offset);
+		tagBits = address >> offset;
+	} 
+	// Case: Direct or Set-Associative
+	else {
+		indexBits = (address >> offset) & ~(~0U << index); 
+		offsetBits = address & ~(~0U << offset);
+		tagBits = address >> (offset + index);
+	}
+}

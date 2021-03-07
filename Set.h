@@ -21,6 +21,10 @@ class Set {
 	~Set();
 
 	// could use a tuple (int, bool)
+	
+
+
+	bool load(int offsetBits, int tagBits, long &cycles);
 
 	// Nested class to represent a block
 	class Block {

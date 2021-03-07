@@ -68,6 +68,8 @@ class Cache {
 
 		// Store with no write allocate (assumes write through)
 		void storeNoWriteAl(uint32_t address);
+		// Obtain various address bits of address	
+		void obtainAddressBits(uint32_t address, int &offsetBits, int &indexBits, int &tagBits);
 };
 
 #endif
