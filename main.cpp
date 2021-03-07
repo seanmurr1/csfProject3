@@ -95,6 +95,8 @@ bool posPowerOfTwo (int num) {
     return true; 
 }
 
+
+// Hey, I don't think you can compare strings with ==. Might need to use .equals
 bool validArgument (std::string argument, std::string option1, std::string option2) {
     if (argument == option1 || argument == option2) {
         return true;

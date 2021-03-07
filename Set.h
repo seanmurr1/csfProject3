@@ -8,12 +8,15 @@
 
 // Class to represent a set in a Cache
 class Set {
+
+	int blocks;
+	int bytes;
+	bool lru;
+
 	std::vector<Block> blocks;
-
-
 		
 	// Constructor
-	Set(int blocks, int bytes);
+	Set(int blocks, int bytes, bool lru);
 	// Destructor
 	~Set();
 
@@ -21,8 +24,10 @@ class Set {
 
 	// Nested class to represent a block
 	class Block {
+		uint32_t tag;	// Tag for block
 		int order;	// Keep track of order based on FIFO or LRU
 		bool dirty;	// Relevant for write-back protocol
+		std::vector<uint32_t> data;	// vector of 4-byte values
 	};
 };
 
