@@ -6,7 +6,7 @@
 using std::vector;
 
 // Constructor
-Cache::Cache(int sets, int blocks, int bytes, bool writeAl, bool writeTh, bool lru) : sets(sets), blocks(blocks), bytes(bytes), writeAllocate(writeAl), writeThrough(writeTh), lru(lru), loads(0), stores(0), lHits(0), lMisses(0), sHits(0), sMisses(0), cycles(0) {
+Cache::Cache(int sets, int blocks, int bytes, bool writeAl, bool writeTh, bool lru) : loads(0), stores(0), lHits(0), lMisses(0), sHits(0), sMisses(0), cycles(0), sets(sets), blocks(blocks), bytes(bytes), writeAllocate(writeAl), writeThrough(writeTh), lru(lru) {
 
 	// Off-set bits
 	offset = log2(bytes);
@@ -15,32 +15,42 @@ Cache::Cache(int sets, int blocks, int bytes, bool writeAl, bool writeTh, bool l
 	// Tag bits
 	tag = 32 - offset - index;
 
+
+	setVec.reserve(sets);
+
+	//setVec = new Set[sets];
+	//for (int i = 0; i < sets; i++) {
+	//	setVec[i] = new Set(blocks, bytes, writeAl, writeTh, lru);
+	//}
+	
 	// Vector of sets
-	sets = new Vector<Set>;
+	//setVec = new vector<Set>;
 	// Adding sets
 	for (int i = 0; i < sets; i++) {
-		sets.push_back(new Set(blocks, bytes, lru));
+		setVec.push_back(Set(blocks, bytes, writeAl, writeTh, lru));
 	}
-
+	
 }
 
 
 // Destructor
 Cache::~Cache() {
-
+	// TODO?
+//	delete [] setVec;
 }
 
-// Loads address. TODO need to deal with cycle data, probably pass by reference into other load
+// Loads address
 void Cache::load(uint32_t address) {
+	// Address info
 	uint32_t indexBits;
 	uint32_t tagBits;
 	// Obtain address bit information
 	obtainAddressBits(address, indexBits, tagBits);	
 	
 	// Loading to set in question
-	bool hit = sets[indexBits].load(tagBits, cycles);
+	bool hit = setVec[indexBits].load(tagBits, cycles);
 
-	// Updating statistics
+	// Updating statistics based on result
 	if (hit) {
 		lHits++;
 	} else {
@@ -49,7 +59,27 @@ void Cache::load(uint32_t address) {
 	loads++;
 }
 
-void Cache::obtainAddressBits(uint32_t, address, uint32_t &indexBits, uint32_t &tagBits) {
+// Stores address
+void Cache::store(uint32_t address) {
+	// Address info
+	uint32_t indexBits;
+	uint32_t tagBits;
+	// Obtaining address bit info
+	obtainAddressBits(address, indexBits, tagBits);
+
+	// Storing to set in question
+	bool hit = setVec[indexBits].store(tagBits, cycles);
+
+	// Updating statistics based on result
+	if (hit) {
+		sHits++;
+	} else {
+		sMisses++;
+	}
+	stores++;
+}
+
+void Cache::obtainAddressBits(uint32_t address, uint32_t &indexBits, uint32_t &tagBits) {
 	// Case: Fully-Associative
 	if (index == 0) {
 		indexBits = 0;

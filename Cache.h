@@ -23,19 +23,21 @@ class Cache {
 		int blocks;	// Number of blocks per set
 		int bytes;	// Number of bytes per block
 
+		// Parameters for specific behavior: 
+		bool writeAllocate;	// If false, then no-write-allocate
+		bool writeThrough;	// If false, then write-back
+		bool lru;		// If false, then fifo
+
 		// Address information:
 		int offset;	// Off-set bits
 		int index;	// Index bits	
 		int tag; 	// Tag bits
 		
 		// Vector of sets:
-		std::vector<Set> sets;
+		std::vector<Set> setVec;
+		// Array of sets:
+		//Set* setVec;
 			
-		// Parameters for specific behavior: 
-		bool writeAllocate;	// If false, then no-write-allocate
-		bool writeThrough;	// If false, then write-back
-		bool lru;		// If false, then fifo
-
 	// Public functions
 	public:
 		// Constructor
@@ -45,12 +47,6 @@ class Cache {
 
 		// Load function
 		void load(uint32_t address);
-
-		// load for FIFO
-
-		// load for LRU
-
-		// method to handle eviction
 
 		// Store function
 		void store(uint32_t address);
