@@ -32,14 +32,13 @@ Cache::~Cache() {
 
 // Loads address. TODO need to deal with cycle data, probably pass by reference into other load
 void Cache::load(uint32_t address) {
-	int indexBits;
-	int offsetBits;
-	int tagBits;
+	uint32_t indexBits;
+	uint32_t tagBits;
 	// Obtain address bit information
-	obtainAddressBits(address, offsetBits, indexBits, tagBits);	
+	obtainAddressBits(address, indexBits, tagBits);	
 	
 	// Loading to set in question
-	bool hit = sets[indexBits].load(offsetBits, tagBits, cycles);
+	bool hit = sets[indexBits].load(tagBits, cycles);
 
 	// Updating statistics
 	if (hit) {
@@ -50,17 +49,17 @@ void Cache::load(uint32_t address) {
 	loads++;
 }
 
-void Cache::obtainAddressBits(uint32_t, address, int &offsetBits, int &indexBits, int &tagBits) {
+void Cache::obtainAddressBits(uint32_t, address, uint32_t &indexBits, uint32_t &tagBits) {
 	// Case: Fully-Associative
 	if (index == 0) {
 		indexBits = 0;
-		offsetBits = address & ~(~0U << offset);
+		//offsetBits = address & ~(~0U << offset);
 		tagBits = address >> offset;
 	} 
 	// Case: Direct or Set-Associative
 	else {
 		indexBits = (address >> offset) & ~(~0U << index); 
-		offsetBits = address & ~(~0U << offset);
+		//offsetBits = address & ~(~0U << offset);
 		tagBits = address >> (offset + index);
 	}
 }
