@@ -2,6 +2,7 @@
 # Makefile for CSF Assignment 3
 #
 
+CPP_SRCS = Cache.cpp main.cpp Set.cpp
 CONSERVATIVE_FLAGS = -Wall -Wextra -pedantic
 DEBUGGING_FLAGS = -g -O0
 CFLAGS = $(CONSERVATIVE_FLAGS) $(DEBUGGING_FLAGS)
@@ -23,22 +24,16 @@ Set.o: Set.cpp Set.h
 clean :
 	rm -f *.o csim depend.mak 
 
-
-#CPP_SRCS = Cache.cpp main.cpp Set.cpp
-#CFLAGS = -g -Wall -Wextra -pedantic 
-
 #%.o : %.cpp
 #	g++ $(CFLAGS) -c $<
-
-#all : csim
 
 #csim : Cache.o main.o Set.o
 #	g++ -o $@ Cache.o main.o Set.o -lm
 
-#depend.mak :
-#	touch $@
+depend.mak :
+	touch $@
 
-#depend :
-#	g++ -M $(CPP_SRCS) > depend.mak
+depend :
+	g++ -M $(CPP_SRCS) > depend.mak
 
-#include depend.mak
+include depend.mak

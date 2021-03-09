@@ -15,28 +15,18 @@ Cache::Cache(int sets, int blocks, int bytes, bool writeAl, bool writeTh, bool l
 	// Tag bits
 	tag = 32 - offset - index;
 
-
+	// Reserving space for sets in vector
 	setVec.reserve(sets);
-
-	//setVec = new Set[sets];
-	//for (int i = 0; i < sets; i++) {
-	//	setVec[i] = new Set(blocks, bytes, writeAl, writeTh, lru);
-	//}
-	
-	// Vector of sets
-	//setVec = new vector<Set>;
 	// Adding sets
 	for (int i = 0; i < sets; i++) {
 		setVec.push_back(Set(blocks, bytes, writeAl, writeTh, lru));
 	}
-	
 }
 
 
 // Destructor
 Cache::~Cache() {
 	// TODO?
-//	delete [] setVec;
 }
 
 // Loads address

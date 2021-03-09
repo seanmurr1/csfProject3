@@ -35,8 +35,6 @@ class Cache {
 		
 		// Vector of sets:
 		std::vector<Set> setVec;
-		// Array of sets:
-		//Set* setVec;
 			
 	// Public functions
 	public:
