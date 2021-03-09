@@ -2,11 +2,12 @@
 
 #include "Cache.h"
 #include <cmath>
+#include <iostream>
 
-using std::vector;
+using std::vector; using std::cout; using std::endl;
 
 // Constructor
-Cache::Cache(int sets, int blocks, int bytes, bool writeAl, bool writeTh, bool lru) : loads(0), stores(0), lHits(0), lMisses(0), sHits(0), sMisses(0), cycles(0), sets(sets), blocks(blocks), bytes(bytes), writeAllocate(writeAl), writeThrough(writeTh), lru(lru) {
+Cache::Cache(int sets, int blocks, int bytes, bool writeAl, bool writeTh, bool lru) : loads(0), stores(0), lHits(0), lMisses(0), sHits(0), sMisses(0), cycles(0), sets(sets), blocks(blocks), bytes(bytes) {
 
 	// Off-set bits
 	offset = log2(bytes);
@@ -82,4 +83,14 @@ void Cache::obtainAddressBits(uint32_t address, uint32_t &indexBits, uint32_t &t
 		//offsetBits = address & ~(~0U << offset);
 		tagBits = address >> (offset + index);
 	}
+}
+
+void Cache::printSummary() {
+	cout << "Total loads: " << loads << endl;
+	cout << "Total stores: " << stores << endl;
+	cout << "Load hits: " << lHits << endl;
+	cout << "Load misses: " << lMisses << endl;
+	cout << "Store hits: " << sHits << endl;
+	cout << "Store misses: " << sMisses << endl;
+	cout << "Total cycles: " << cycles << endl;
 }

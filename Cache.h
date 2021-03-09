@@ -23,11 +23,6 @@ class Cache {
 		int blocks;	// Number of blocks per set
 		int bytes;	// Number of bytes per block
 
-		// Parameters for specific behavior: 
-		bool writeAllocate;	// If false, then no-write-allocate
-		bool writeThrough;	// If false, then write-back
-		bool lru;		// If false, then fifo
-
 		// Address information:
 		int offset;	// Off-set bits
 		int index;	// Index bits	
@@ -54,14 +49,6 @@ class Cache {
 
 	// Helper functions
 	private:
-		// Store with write allocate and write through
-		void storeWriteAlTh(uint32_t address);
-
-		// Store with write allocate and write back
-		void storeWriteAlBa(uint32_t address);
-
-		// Store with no write allocate (assumes write through)
-		void storeNoWriteAl(uint32_t address);
 		// Obtain various address bits of address	
 		void obtainAddressBits(uint32_t address, uint32_t &indexBits, uint32_t &tagBits);
 };

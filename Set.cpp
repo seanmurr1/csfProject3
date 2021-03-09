@@ -23,11 +23,52 @@ Set::~Set() {
 }
 
 bool Set::store(uint32_t tagBits, long &cycles) {
-	// TODO
-	// Place holder to get rid of compiler warning
-	if (tagBits > 0) {
-		cycles++;
+	// Initial overhead for accessing cache: 1 cycle
+	cycles++;
+
+	// Checking all blocks
+	for (int i = 0; i < blocks; i++) {
+		// Case: we have a store/write hit
+		if (blockVec[i].valid && blockVec[i].tag == tagBits) {
+			// TODO do we still update orders if LRU and store hit?
+			if (lru) {
+				updateOrders(blockVec[i].order);
+			}
+
+			// Case: write through to main memory
+			if (writeThrough) {
+				// Overhead for writing value to memory
+				cycles += (bytes / 4) * 100;
+			} 
+			// Case: write back, mark block as dirty
+			else {
+				blockVec[i].dirty = true;
+			}
+			// Signify store/write hit
+			return true;
+		}
 	}
+	// At this point we have a store/write miss
+	
+	// Case: write allocate
+	if (writeAllocate) {
+		// Bringing memory block into cache before store proceeds
+		int index = evictAndLoad(tagBits, cycles);
+		// Case: write through to main memory
+		if (writeThrough) {
+			// Overhead for writing value to memory
+			cycles += (bytes / 4) * 100;
+		}	
+		// Case: write back, mark block as dirty
+		else {
+			blockVec[index].dirty = true;
+		}
+	}
+	// If no-write-allocate, we do not modify cache
+	// TODO still overhead?
+	// Overhead for writing to main memory
+	cycles += (bytes / 4) * 100;
+	// Overhead for cache again???
 	
 	return false;
 }
@@ -41,7 +82,7 @@ bool Set::load(uint32_t tagBits, long &cycles) {
 	// Checking all blocks. TODO maybe change this to iterator later if needed
 	for (int i = 0; i < blocks; i++) {
 		// Case: we have a load/read hit. Don't need to alter cache
-		if (blockVec[i].tag == tagBits && blockVec[i].valid) {
+		if (blockVec[i].valid && blockVec[i].tag == tagBits) {
 			// Update order values according to protocol
 			if (lru) {
 				updateOrders(blockVec[i].order);
@@ -63,14 +104,14 @@ bool Set::load(uint32_t tagBits, long &cycles) {
 }
 
 // Loads after a load miss. Fills in invalid block or evicts according to protocol
-void Set::evictAndLoad(uint32_t tagBits, long &cycles) {
+int Set::evictAndLoad(uint32_t tagBits, long &cycles) {
 	// Case: we have unused blocks
 	if (curSize != blocks) {
 		// Loading into first empty block
-		loadIntoEmpty(tagBits);
+		int index = loadIntoEmpty(tagBits);
 		// Overhead for loading block
 		cycles += (bytes / 4) * 100;
-		return;
+		return index;
 	}
 
 	// Case: all blocks are used, we must evict one
@@ -87,14 +128,20 @@ void Set::evictAndLoad(uint32_t tagBits, long &cycles) {
 			}
 			// Overhead for loading new block
 			cycles += (bytes / 4) * 100;
-			return;
+			return i;
 		}
 	}
+	// Case: something went wrong
+	// This is mostly here to appease compiler warning
+	// Implementation should make it so there is always a block to evict (keyword should)
+	return -1;
 }
 
 
 // Loads a block into set, assuming that there are invalid blocks (AKA unused ones)
-void Set::loadIntoEmpty(uint32_t tagBits) {
+int Set::loadIntoEmpty(uint32_t tagBits) {
+	// Index of block we load into
+	int index;
 	// Have we inserted the new block yet?
 	bool inserted = false;
 	// Checking all blocks
@@ -105,6 +152,7 @@ void Set::loadIntoEmpty(uint32_t tagBits) {
 			blockVec[i].valid = true;		// Setting to valid
 			blockVec[i].order = 0;		// Order is 0 (regardless of FIFO or LRU)
 			inserted = true;		// Prevent further insertions
+			index = i;
 		} 
 		// Updating all other valid blocks, incrementing order by 1
 		else if (blockVec[i].valid) {
@@ -113,6 +161,7 @@ void Set::loadIntoEmpty(uint32_t tagBits) {
 	}
 	// Update size (number of valid blocks in set)
 	curSize++;
+	return index;
 }
 
 
