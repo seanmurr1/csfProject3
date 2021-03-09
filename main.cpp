@@ -12,8 +12,8 @@
 #include "Set.h"
 #include "Cache.h"
 
-bool posPowerOfTwo (int num);
-bool validArgument (std::string argument, std::string option1, std::string option2);
+void posPowerOfTwo (int num);
+void validArgument (std::string argument, std::string option1, std::string option2);
 // take in command line arguments
 
 // check if they're valid (helper functions)
@@ -24,25 +24,21 @@ bool validArgument (std::string argument, std::string option1, std::string optio
 // should not exceed 30 lines. should not need to scroll (think 50 lines hard max)
 
 int main (int argc, char * argv[]) {
-    /*
-    * EXAMPLE: 256 4 16 write-allocate write-back lru < sometracefile
-    * number of sets in the cache (a positive power-of-2)
-    * number of blocks in each set (a positive power-of-2)
-    * number of bytes in each block (a positive power-of-2, at least 4)
-    * write-allocate or no-write-allocate
-    * write-through or write-back
-    * lru (least-recently-used) or fifo evictions
-    * tracefile
-    */
-    int numSets;
-    int numBlocks;
-    int numBytes;
-    // const chars for the rest of the arguments? then set booleans when checking if valid?
-    const char * writeAllocateOrNot;
-    const char * writeThroughOrBack;
-    // const char * lruOrFifo; // only declare and read in if associative cache
-    // might be 6 depending on if associative cache
-    if (argc < 7) {     // might be 8 depending on '<'
+
+    int numSets;                        // Command-line argument
+    int numBlocks;                      // Command-line argument
+    int numBytes;                       // Command-line argument
+    // Const chars for the rest of the arguments? then set booleans when checking if valid?
+   // std::string writeAllocateOrNot;    // Command-line argument
+    //std::string writeThroughOrBack;    // Command-line argument
+   // std::string evictionType;          // Command-line argument
+    
+    bool writeAllocate;	// write-allocate or no-write-allocate
+	bool writeThrough;	// write-through or write-back
+	bool lru = true;		// LRU if true, FIFO if false
+
+    // Might be 7 depending on if associative cache
+    if (argc < 6) {    
         std::cerr << "Error: Missing arguments" << std::endl;
         return 1;
     }
@@ -50,9 +46,9 @@ int main (int argc, char * argv[]) {
     numSets = atoi(argv[1]);
     numBlocks = atoi(argv[2]);
     numBytes = atoi(argv[3]);
-    writeAllocateOrNot = argv[4];
-    writeThroughOrBack = argv[5];
-    // if determined to be an associative cache lruOrFifo = argv[6];
+    std::string writeAllocateOrNot( argv[4]); // Command-line argument
+    std::string writeThroughOrBack( argv[5]); // Command-line argument
+    //writeThroughOrBack = (argv[5]);
 
     // check to see if arguments are valid
 
@@ -68,16 +64,50 @@ int main (int argc, char * argv[]) {
         return 1;
     }
 
-    // number of bytes in block has to be a positive power of 2 and at least 4
+    // Number of bytes in block has to be a positive power of 2 and at least 4
     if((numBytes < 4) | !posPowerOfTwo(numBytes)){
         std::cerr << "Error: Not a valid number of bytes" << std::endl;
         return 1;
     }
 
     validArgument(writeAllocateOrNot, "write-allocate", "no-write-allocate");
+    if (writeAllocateOrNot.compare("write-allocate") == 0) {
+        writeAllocate = true;
+    } else {
+        writeAllocate = false;
+    }
+
     validArgument(writeThroughOrBack, "write-through", "write-back");
+    if (writeThroughOrBack.compare("write-through") == 0){
+        writeThrough = true;
+    } else {
+        writeThrough = false;
+    }
+
+    // If write back and no write allocate print error message
+    if (writeAllocate & !writeThrough) {
+        std::cerr << "Error: Invalid combination, if miss, data will never make it to memory" << std::endl;
+    }
+
+    // A cache with n sets of 1 block each is direct-mapped (not associative)
+    if (numBlocks != 1) {
+        // Cache is associative
+        if (argc < 7) {    // check to make sure enough arguments
+        std::cerr << "Error: Missing argument specifying eviction" << std::endl;
+        return 1;
+        }
+        //evictionType = argv[6];
+        std::string evictionType( argv[6]);
+        validArgument(evictionType, "lru", "fifo");
+        if (evictionType.compare("lru") == 0){
+         lru = true;
+        } else {
+          lru = false;
+        }
+    }
 
     // reading in the tracefile should be like reading with cin
+    // while loop while (std::cin >> var)
 
     return 0;
 }
@@ -88,18 +118,18 @@ bool posPowerOfTwo (int num) {
     }
     while (num != 1) { 
         if (num % 2 == 1) {
-            return false; 
+            return false;
         }
         num = num / 2; 
     } 
-    return true; 
+    return true;
 }
 
 
 // Hey, I don't think you can compare strings with ==. Might need to use .equals
-bool validArgument (std::string argument, std::string option1, std::string option2) {
+void validArgument (std::string argument, std::string option1, std::string option2) {
     if (argument == option1 || argument == option2) {
-        return true;
+        return;
     }
-    return false;
+    std::cerr << "Error: Invalid argument" << std::endl;
 }
