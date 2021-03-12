@@ -12,7 +12,7 @@
 #include "Set.h"
 #include "Cache.h"
 
-void posPowerOfTwo (int num);
+bool posPowerOfTwo (int num);
 void validArgument (std::string argument, std::string option1, std::string option2);
 // take in command line arguments
 
@@ -108,6 +108,9 @@ int main (int argc, char * argv[]) {
 
     // reading in the tracefile should be like reading with cin
     // while loop while (std::cin >> var)
+        for (std::string line; std::getline(std::cin, line);) {
+            std::cout << line << std::endl;
+        }
 
     return 0;
 }
@@ -127,6 +130,7 @@ bool posPowerOfTwo (int num) {
 
 
 // Hey, I don't think you can compare strings with ==. Might need to use .equals
+// i think this should work for strings but fs should look at closer if it doesn't work
 void validArgument (std::string argument, std::string option1, std::string option2) {
     if (argument == option1 || argument == option2) {
         return;
