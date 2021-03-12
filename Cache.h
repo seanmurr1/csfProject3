@@ -5,6 +5,7 @@
 
 // Includes go here:
 #include "Set.h"
+#include "Cache.h"
 #include <vector>
 
 // Class to represent a Cache
