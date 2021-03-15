@@ -12,6 +12,7 @@
 #include "Set.h"
 #include "Cache.h"
 
+uint32_t hexAddressToDecimal (std::string hexAddress);
 bool posPowerOfTwo (int num);
 void validArgument (std::string argument, std::string option1, std::string option2);
 // take in command line arguments
@@ -102,28 +103,79 @@ int main (int argc, char * argv[]) {
     }
 
     // Create cache
+    // Cache::Cache(int sets, int blocks, int bytes, bool writeAl, bool writeTh, bool lru)
+    Cache* cache = new Cache (numSets, numBlocks, numBytes, writeAllocate, writeThrough, lru);
+
+    // Creat set
+    // Set::Set(int blocks, int bytes, bool writeAl, bool writeTh, bool lru)
+    //Set* set = new Set (numBlocks, numBytes,)
 
     std::string line;
     std::string load;
-    std::string address;
+    std::string hexAddress;
     while (getline(std::cin, line)) {
-        std::cout << line << std::endl; // testing
+       // std::cout << line << std::endl; // testing
         // break up the line into arguments
         load = line.substr(0,1);
-        address = line.substr(4, 8);
-        std::cout << address << std::endl;
+        hexAddress = line.substr(4, 8);
+       // std::cout << hexAddress << std::endl;
 
-            
+        uint32_t binaryAddress = hexAddressToDecimal(hexAddress);
+      //  std::cout << binaryAddress << std::endl; 
+
+        if (load.compare("l") == 0) {
+            //load
+            cache->load(binaryAddress);
+        } else if (load.compare("s") == 0) {
+            // store
+            cache->store(binaryAddress);
+        } else {
+            std::cerr << "Error: Not 'l' or 's'" << std::endl;
+        }
+
         // divide into index, tag, offset
         // need to calculate those
         // convert index, tag to decimal
         // use those as parameters
         // simulate cache on line
+        // maybe? but idt this is how the cache.cpp functions are written
     }
 
-   // Cache::printSummary();
+    cache->printSummary();
 
     return 0;
+}
+
+uint32_t hexAddressToDecimal (std::string hexAddress) {
+    uint32_t binaryAddress = 0;
+    int i = 0;
+
+    while(hexAddress[i]) {
+        // Multiply by 2^4 to make space for new bits
+        binaryAddress = binaryAddress * 16;
+
+        // Find binary representation of hex char
+        // Add it to end of binary address
+        char hex_char = hexAddress[i];
+        
+        // if hex is 0-9 
+	    if(hex_char >= '0' && hex_char <= '9') {
+		    binaryAddress = binaryAddress + (hex_char - '0');
+	    }
+
+	    // if A-F
+	    if(hex_char >= 'A' && hex_char <= 'F') {
+	    	binaryAddress = binaryAddress + (hex_char - 'A' + 10);
+	    }
+
+	    // if a-f
+	    if(hex_char >= 'a' && hex_char <= 'f') {
+	    	binaryAddress = binaryAddress + (hex_char - 'a' + 10);
+	    }
+    
+        i++;
+    }
+    return binaryAddress;
 }
 
 bool posPowerOfTwo (int num) {
