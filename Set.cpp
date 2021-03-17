@@ -67,7 +67,7 @@ bool Set::store(uint32_t tagBits, long &cycles) {
 	// If no-write-allocate, we do not modify cache
 	// TODO still overhead?
 	// Overhead for writing to main memory
-	cycles += (bytes / 4) * 100;
+	// cycles += (bytes / 4) * 100;
 	// Overhead for cache again???
 	
 	return false;
@@ -97,7 +97,7 @@ bool Set::load(uint32_t tagBits, long &cycles) {
 
 	// Overhead for passing load back to processor
 	// TODO is this necessary?
-	cycles++;
+	// cycles++;
 
 	// Signify load/read miss
 	return false;
