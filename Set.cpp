@@ -40,6 +40,7 @@ bool Set::store(uint32_t tagBits, long &cycles) {
 				// Overhead for writing value to memory
 				cycles += (bytes / 4) * 100;
 			} 
+
 			// Case: write back, mark block as dirty
 			else {
 				blockVec[i].dirty = true;
@@ -57,17 +58,21 @@ bool Set::store(uint32_t tagBits, long &cycles) {
 		// Case: write through to main memory
 		if (writeThrough) {
 			// Overhead for writing value to memory
-			cycles += (bytes / 4) * 100;
+			// cycles += (bytes / 4) * 100; CHANGING THIS
+			cycles += 100; // Only need to load the specific index
 		}	
 		// Case: write back, mark block as dirty
 		else {
 			blockVec[index].dirty = true;
 		}
 	}
-	// If no-write-allocate, we do not modify cache
+	// Case: no-write-allocate, we do not modify cache
 	// TODO still overhead?
+
 	// Overhead for writing to main memory
-	// cycles += (bytes / 4) * 100;
+	// cycles += (bytes / 4) * 100; CHANGING THIS
+	cycles += 100;	// Only need to load the specific index
+
 	// Overhead for cache again???
 	
 	return false;
