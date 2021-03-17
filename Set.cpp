@@ -24,7 +24,7 @@ Set::~Set() {
 
 bool Set::store(uint32_t tagBits, long &cycles) {
 	// Initial overhead for accessing cache: 1 cycle
-	cycles++;
+	//cycles++;
 
 	// Checking all blocks
 	for (int i = 0; i < blocks; i++) {
@@ -38,7 +38,8 @@ bool Set::store(uint32_t tagBits, long &cycles) {
 			// Case: write through to main memory
 			if (writeThrough) {
 				// Overhead for writing value to memory
-				cycles += (bytes / 4) * 100;
+				//cycles += (bytes / 4) * 100;
+				cycles += 100;
 			} 
 
 			// Case: write back, mark block as dirty
@@ -46,6 +47,7 @@ bool Set::store(uint32_t tagBits, long &cycles) {
 				blockVec[i].dirty = true;
 			}
 			// Signify store/write hit
+			cycles++;
 			return true;
 		}
 	}
@@ -64,14 +66,19 @@ bool Set::store(uint32_t tagBits, long &cycles) {
 		// Case: write back, mark block as dirty
 		else {
 			blockVec[index].dirty = true;
+			cycles++;
 		}
+	} else {
+		// Case: no-write-allocate
+		cycles += 100; // writing to main
+
 	}
 	// Case: no-write-allocate, we do not modify cache
 	// TODO still overhead?
 
 	// Overhead for writing to main memory
 	// cycles += (bytes / 4) * 100; CHANGING THIS
-	cycles += 100;	// Only need to load the specific index
+	//cycles += 100;	// Only need to load the specific index
 
 	// Overhead for cache again???
 	
@@ -82,7 +89,7 @@ bool Set::store(uint32_t tagBits, long &cycles) {
 // Loads data into a set
 bool Set::load(uint32_t tagBits, long &cycles) {
 	// Initial overhead for accessing cache: 1 cycle
-	cycles++;
+	//cycles++;
 
 	// Checking all blocks. TODO maybe change this to iterator later if needed
 	for (int i = 0; i < blocks; i++) {
@@ -93,6 +100,7 @@ bool Set::load(uint32_t tagBits, long &cycles) {
 				updateOrders(blockVec[i].order);
 			}
 			// Signify load/read hit
+			cycles++;
 			return true;
 		}
 	}
