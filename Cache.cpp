@@ -28,6 +28,7 @@ Cache::Cache(int sets, int blocks, int bytes, bool writeAl, bool writeTh, bool l
 // Destructor
 Cache::~Cache() {
 	// TODO?
+	// we don't allocate memory?
 }
 
 // Loads address
