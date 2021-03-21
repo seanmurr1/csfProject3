@@ -20,6 +20,7 @@ Set::Set(int blocks, int bytes, bool writeAl, bool writeTh, bool lru) : blocks(b
 // Destructor
 Set::~Set() {
 	// TODO?
+	// no because not allocating memory? 	DELETE BEFORE FINAL SUBMISSION
 }
 
 bool Set::store(uint32_t tagBits, long &cycles) {
@@ -30,7 +31,6 @@ bool Set::store(uint32_t tagBits, long &cycles) {
 	for (int i = 0; i < blocks; i++) {
 		// Case: we have a store/write hit
 		if (blockVec[i].valid && blockVec[i].tag == tagBits) {
-			// TODO do we still update orders if LRU and store hit?
 			if (lru) {
 				updateOrders(blockVec[i].order);
 			}
@@ -38,7 +38,6 @@ bool Set::store(uint32_t tagBits, long &cycles) {
 			// Case: write through to main memory
 			if (writeThrough) {
 				// Overhead for writing value to memory
-				//cycles += (bytes / 4) * 100;
 				cycles += 100;
 			} 
 
@@ -60,7 +59,6 @@ bool Set::store(uint32_t tagBits, long &cycles) {
 		// Case: write through to main memory
 		if (writeThrough) {
 			// Overhead for writing value to memory
-			// cycles += (bytes / 4) * 100; CHANGING THIS
 			cycles += 100; // Only need to load the specific index
 		}	
 		// Case: write back, mark block as dirty
@@ -74,13 +72,6 @@ bool Set::store(uint32_t tagBits, long &cycles) {
 
 	}
 	// Case: no-write-allocate, we do not modify cache
-	// TODO still overhead?
-
-	// Overhead for writing to main memory
-	// cycles += (bytes / 4) * 100; CHANGING THIS
-	//cycles += 100;	// Only need to load the specific index
-
-	// Overhead for cache again???
 	
 	return false;
 }
@@ -88,10 +79,7 @@ bool Set::store(uint32_t tagBits, long &cycles) {
 
 // Loads data into a set
 bool Set::load(uint32_t tagBits, long &cycles) {
-	// Initial overhead for accessing cache: 1 cycle
-	//cycles++;
-
-	// Checking all blocks. TODO maybe change this to iterator later if needed
+	// Checking all blocks.
 	for (int i = 0; i < blocks; i++) {
 		// Case: we have a load/read hit. Don't need to alter cache
 		if (blockVec[i].valid && blockVec[i].tag == tagBits) {
@@ -107,10 +95,6 @@ bool Set::load(uint32_t tagBits, long &cycles) {
 
 	// At this point we have a load/read miss. We must evict a block to load new block
 	evictAndLoad(tagBits, cycles); // Evicting and loading new block
-
-	// Overhead for passing load back to processor
-	// TODO is this necessary?
-	// cycles++;
 
 	// Signify load/read miss
 	return false;

@@ -15,26 +15,15 @@
 uint32_t hexAddressToDecimal (std::string hexAddress);
 bool posPowerOfTwo (int num);
 void validArgument (std::string argument, std::string option1, std::string option2);
-// take in command line arguments
-
-// check if they're valid (helper functions)
-    // example FIFO or LRU else invalid (exit with warning)
-    // same idea with values (power of 2 etc)
-
-// after pass into cache constructor and instantiate an object
-// should not exceed 30 lines. should not need to scroll (think 50 lines hard max)
 
 int main (int argc, char * argv[]) {
 
-    int numSets;                        // Command-line argument
-    int numBlocks;                      // Command-line argument
-    int numBytes;                       // Command-line argument    
-    bool writeAllocate;	// write-allocate or no-write-allocate
-	bool writeThrough;	// write-through or write-back
-	bool lru = true;		// LRU if true, FIFO if false
+    int numSets, numBlocks, numBytes;   // Command-line argument
+    bool writeAllocate;	                // write-allocate or no-write-allocate
+	bool writeThrough;              	// write-through or write-back
+	bool lru = true;	            	// LRU if true, FIFO if false
 
-    // Might be 7 depending on if associative cache
-    if (argc < 6) {    
+    if (argc < 6) {    // Might be 7 depending on if associative cache
         std::cerr << "Error: Missing arguments" << std::endl;
         return 1;
     }
@@ -45,23 +34,18 @@ int main (int argc, char * argv[]) {
     std::string writeAllocateOrNot( argv[4]); // Command-line argument
     std::string writeThroughOrBack( argv[5]); // Command-line argument
 
-
     // Check to see if arguments are valid
-
-    // Number of sets in cache has to be a positive power of 2
-    if(!posPowerOfTwo(numSets)){
+    if(!posPowerOfTwo(numSets)){  // Number of sets in cache has to be a positive power of 2
         std::cerr << "Error: Not a valid number of sets" << std::endl;
         return 1;
     }
 
-    // Number of blocks in set has to be a positive power of 2
-    if(!posPowerOfTwo(numBlocks)){
+    if(!posPowerOfTwo(numBlocks)){     // Number of blocks in set has to be a positive power of 2
         std::cerr << "Error: Not a valid number of blocks" << std::endl;
         return 1;
     }
 
-    // Number of bytes in block has to be a positive power of 2 and at least 4
-    if((numBytes < 4) | !posPowerOfTwo(numBytes)){
+    if((numBytes < 4) | !posPowerOfTwo(numBytes)){ // Number of bytes in block has to be a positive power of 2 and at least 4
         std::cerr << "Error: Not a valid number of bytes" << std::endl;
         return 1;
     }
@@ -103,46 +87,25 @@ int main (int argc, char * argv[]) {
     }
 
     // Create cache
-    // Cache::Cache(int sets, int blocks, int bytes, bool writeAl, bool writeTh, bool lru)
     Cache* cache = new Cache (numSets, numBlocks, numBytes, writeAllocate, writeThrough, lru);
-
-    // Creat set
-    // Set::Set(int blocks, int bytes, bool writeAl, bool writeTh, bool lru)
-    //Set* set = new Set (numBlocks, numBytes,)
-
     std::string line;
     std::string load;
     std::string hexAddress;
     while (getline(std::cin, line)) {
-       // std::cout << line << std::endl; // testing
         // break up the line into arguments
         load = line.substr(0,1);
         hexAddress = line.substr(4, 8);
-       // std::cout << hexAddress << std::endl;
-
         uint32_t binaryAddress = hexAddressToDecimal(hexAddress);
-      //  std::cout << binaryAddress << std::endl; 
 
         if (load.compare("l") == 0) {
-            //load
             cache->load(binaryAddress);
         } else if (load.compare("s") == 0) {
-            // store
             cache->store(binaryAddress);
         } else {
             std::cerr << "Error: Not 'l' or 's'" << std::endl;
         }
-
-        // divide into index, tag, offset
-        // need to calculate those
-        // convert index, tag to decimal
-        // use those as parameters
-        // simulate cache on line
-        // maybe? but idt this is how the cache.cpp functions are written
     }
-
     cache->printSummary();
-
     return 0;
 }
 
