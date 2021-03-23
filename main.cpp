@@ -80,7 +80,8 @@ int main (int argc, char * argv[]) {
         // Cache is associative
         if (argc < 7) {    // check to make sure enough arguments
         std::cerr << "Error: Missing argument specifying eviction" << std::endl;
-        return 1;
+        exit(1);
+        //return 1;
         }
         std::string evictionType( argv[6]);
         validArgument(evictionType, "lru", "fifo");
@@ -108,6 +109,7 @@ int main (int argc, char * argv[]) {
             cache->store(binaryAddress);
         } else {
             std::cerr << "Error: Not 'l' or 's'" << std::endl;
+            exit(1);
         }
     }
     cache->printSummary();
