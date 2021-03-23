@@ -87,7 +87,7 @@ void helper::checkValidArgs(int numSets, int numBlocks, int numBytes, string wri
 	// Checking bytes
 	if((numBytes < 4) | !posPowerOfTwo(numBytes)){ // Number of bytes in block has to be a positive power of 2 and at least 4
         	std::cerr << "Error: Not a valid number of bytes" << std::endl;
-        	rexit(1);
+        	exit(1);
     	}
 
 	// Checking write allocate or not
@@ -114,7 +114,7 @@ void helper::checkValidArgs(int numSets, int numBlocks, int numBytes, string wri
 }
 
 // Simulates cache
-void helper::processCache(int numSets, int numBlocks, int numBytes, bool writeAllocate, bool writeThrough, bool lru) {
+int helper::processCache(int numSets, int numBlocks, int numBytes, bool writeAllocate, bool writeThrough, bool lru) {
 	// Create cache
     Cache* cache = new Cache (numSets, numBlocks, numBytes, writeAllocate, writeThrough, lru);
     string line;
@@ -139,7 +139,7 @@ void helper::processCache(int numSets, int numBlocks, int numBytes, bool writeAl
     }
 	// Printing summary
     cache->printSummary();
-    return 0;
+	return 0;
 }
 
 // Processes command-line arguments
@@ -158,7 +158,7 @@ int helper::processArgs(int argc, char* argv[]) {
    
 	bool writeAllocate;
 	bool writeThrough;
-	bool lru = true,	
+	bool lru = true;	
 
 	// Checking arguments
 	checkValidArgs(numSets, numBlocks, numBytes, writeAllocateOrNot, writeThroughOrBack, writeAllocate, writeThrough);
