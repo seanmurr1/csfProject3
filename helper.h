@@ -7,10 +7,9 @@
 // Includes go here:
 #include "Set.h"
 #include "Cache.h"
-#include "helper.h"
 #include <string>
 
-// Class to represent a Cache
+// Class for helper functions
 class helper {
 
     public:

@@ -18,6 +18,12 @@ Text me either way? I won't be back until late monday but if you want to lmk wha
 Contributions:
 
 Sean:
-
+ - Cache class
+ - Set class
+ - Cache analysis
+ - Debugging and refactoring
 
 Shelby:
+ - Helper class
+ - Cache analysis
+ - Debugging and refactoring

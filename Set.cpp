@@ -4,7 +4,6 @@
 
 using std::vector;
 
-
 // Constructor
 Set::Set(int blocks, int bytes, bool writeAl, bool writeTh, bool lru) : blocks(blocks), bytes(bytes), writeAllocate(writeAl), writeThrough(writeTh), lru(lru) {
 
@@ -18,10 +17,7 @@ Set::Set(int blocks, int bytes, bool writeAl, bool writeTh, bool lru) : blocks(b
 }
 
 // Destructor
-Set::~Set() {
-	// TODO?
-	// no because not allocating memory? 	DELETE BEFORE FINAL SUBMISSION
-}
+Set::~Set() { }
 
 bool Set::store(uint32_t tagBits, long &cycles) {
 	// Initial overhead for accessing cache: 1 cycle

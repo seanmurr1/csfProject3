@@ -116,7 +116,7 @@ void helper::checkValidArgs(int numSets, int numBlocks, int numBytes, string wri
 // Simulates cache
 int helper::processCache(int numSets, int numBlocks, int numBytes, bool writeAllocate, bool writeThrough, bool lru) {
 	// Create cache
-    Cache* cache = new Cache (numSets, numBlocks, numBytes, writeAllocate, writeThrough, lru);
+    Cache cache = Cache (numSets, numBlocks, numBytes, writeAllocate, writeThrough, lru);
     string line;
     string load;
     string hexAddress;
@@ -129,17 +129,17 @@ int helper::processCache(int numSets, int numBlocks, int numBytes, bool writeAll
 		
 		// Checking operation
         if (load.compare("l") == 0) {
-            cache->load(binaryAddress);
+            cache.load(binaryAddress);
         } else if (load.compare("s") == 0) {
-       		cache->store(binaryAddress);
+       		cache.store(binaryAddress);
         } else {
             std::cerr << "Error: Not 'l' or 's'" << std::endl;
             exit(1);
         }
     }
 	// Printing summary
-    cache->printSummary();
-	return 0;
+    cache.printSummary();	
+    return 0;
 }
 
 // Processes command-line arguments

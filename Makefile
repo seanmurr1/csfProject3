@@ -27,12 +27,6 @@ Set.o: Set.cpp Set.h
 clean :
 	rm -f *.o csim depend.mak 
 
-#%.o : %.cpp
-#	g++ $(CFLAGS) -c $<
-
-#csim : Cache.o main.o Set.o
-#	g++ -o $@ Cache.o main.o Set.o -lm
-
 depend.mak :
 	touch $@
 

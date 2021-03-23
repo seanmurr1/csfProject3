@@ -26,10 +26,7 @@ Cache::Cache(int sets, int blocks, int bytes, bool writeAl, bool writeTh, bool l
 
 
 // Destructor
-Cache::~Cache() {
-	// TODO?
-	// we don't allocate memory? DELETE BEFORE FINAL SUBMISSION
-}
+Cache::~Cache() { }
 
 // Loads address
 void Cache::load(uint32_t address) {
