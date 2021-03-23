@@ -20,8 +20,9 @@
 //void validArgument (std::string argument, std::string option1, std::string option2);
 
 int main (int argc, char * argv[]) {
+    helper toUse;
 
-	return processArgs(argc, argv);
+	return toUse.processArgs(argc, argv);
 
 /*
     int numSets, numBlocks, numBytes;   // Command-line argument

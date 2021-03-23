@@ -13,8 +13,12 @@
 // using statements go here:
 using std::string;
 
+helper::helper() {
+
+}
+
 // Converts hex string to decimal address
-uint32_t hexAddressToDecimal(string hexAddress) {
+uint32_t helper::hexAddressToDecimal(string hexAddress) {
 	uint32_t binaryAddress = 0;
     	int i = 0;
 
@@ -47,7 +51,7 @@ uint32_t hexAddressToDecimal(string hexAddress) {
 }
 
 // Checks if a number is a positive power of two
-bool posPowerOfTwo(int num) {
+bool helper::posPowerOfTwo(int num) {
 	if (num <= 0) {
         	return false;
     	}
@@ -61,7 +65,7 @@ bool posPowerOfTwo(int num) {
 }
 
 // Checks if a string argument is valid among two options
-void validArgument(string argument, string option1, string option2) {
+void helper::validArgument(string argument, string option1, string option2) {
 	if (argument.compare(option1) == 0 || argument.compare(option2) == 0) {
 		return;
 	}
@@ -69,7 +73,7 @@ void validArgument(string argument, string option1, string option2) {
 }
 
 // Checks validity of command line arguments
-void checkValidArgs(int numSets, int numBlocks, int numBytes, string writeAllocateOrNot, string writeThroughOrBack, bool &writeAllocate, bool &writeThrough) {
+void helper::checkValidArgs(int numSets, int numBlocks, int numBytes, string writeAllocateOrNot, string writeThroughOrBack, bool &writeAllocate, bool &writeThrough) {
 	// Checking sets
 	if(!posPowerOfTwo(numSets)){  // Number of sets in cache has to be a positive power of 2
         	std::cerr << "Error: Not a valid number of sets" << std::endl;
@@ -83,69 +87,68 @@ void checkValidArgs(int numSets, int numBlocks, int numBytes, string writeAlloca
 	// Checking bytes
 	if((numBytes < 4) | !posPowerOfTwo(numBytes)){ // Number of bytes in block has to be a positive power of 2 and at least 4
         	std::cerr << "Error: Not a valid number of bytes" << std::endl;
-        	exit(1);
+        	rexit(1);
     	}
 
 	// Checking write allocate or not
 	validArgument(writeAllocateOrNot, "write-allocate", "no-write-allocate");
 	if (writeAllocateOrNot.compare("write-allocate") == 0) {
-        	writeAllocate = true;
-    	} else {
-        	writeAllocate = false;
-    	}
+        writeAllocate = true;
+    } else {
+    	writeAllocate = false;
+	}
 
 	// Checking write through or back
-    	validArgument(writeThroughOrBack, "write-through", "write-back");
-    	if (writeThroughOrBack.compare("write-through") == 0){
-        	writeThrough = true;
-    	} else {
-        	writeThrough = false;
+    validArgument(writeThroughOrBack, "write-through", "write-back");
+	if (writeThroughOrBack.compare("write-through") == 0){
+    	writeThrough = true;
+    } else {
+        writeThrough = false;
    	 }
 
     	// If write back and no write allocate print error message
-    	if (!writeAllocate & !writeThrough) {
-        	std::cerr << "Error: Invalid combination, if miss, data will never make it to memory" << std::endl;
-        	exit(1);
-    	}
-	
+    if (!writeAllocate & !writeThrough) {
+        std::cerr << "Error: Invalid combination, if miss, data will never make it to memory" << std::endl;
+        exit(1);
+    }
 }
 
 // Simulates cache
-int processCache(int numSets, int numBlocks, int numBytes, bool writeAllocate, bool writeThrough, bool lru) {
+void helper::processCache(int numSets, int numBlocks, int numBytes, bool writeAllocate, bool writeThrough, bool lru) {
 	// Create cache
-    	Cache* cache = new Cache (numSets, numBlocks, numBytes, writeAllocate, writeThrough, lru);
-    	string line;
-    	string load;
-    	string hexAddress;
+    Cache* cache = new Cache (numSets, numBlocks, numBytes, writeAllocate, writeThrough, lru);
+    string line;
+    string load;
+    string hexAddress;
 	// Processing input
-    	while (getline(std::cin, line)) {
-        	// break up the line into arguments
-        	load = line.substr(0,1);
-        	hexAddress = line.substr(4, 8);
-        	uint32_t binaryAddress = hexAddressToDecimal(hexAddress);
+    while (getline(std::cin, line)) {
+        // break up the line into arguments
+        load = line.substr(0,1);
+        hexAddress = line.substr(4, 8);
+        uint32_t binaryAddress = hexAddressToDecimal(hexAddress);
 		
 		// Checking operation
-        	if (load.compare("l") == 0) {
-            		cache->load(binaryAddress);
-        	} else if (load.compare("s") == 0) {
-            		cache->store(binaryAddress);
-        	} else {
-            		std::cerr << "Error: Not 'l' or 's'" << std::endl;
-            		exit(1);
-        	}
-    	}
+        if (load.compare("l") == 0) {
+            cache->load(binaryAddress);
+        } else if (load.compare("s") == 0) {
+       		cache->store(binaryAddress);
+        } else {
+            std::cerr << "Error: Not 'l' or 's'" << std::endl;
+            exit(1);
+        }
+    }
 	// Printing summary
-    	cache->printSummary();
-    	return 0;
+    cache->printSummary();
+    return 0;
 }
 
 // Processes command-line arguments
-int processArgs(int argc, char* argv[]) {
+int helper::processArgs(int argc, char* argv[]) {
 	// Checking for correct number of args
 	if (argc < 6) { 
-        	std::cerr << "Error: Missing arguments" << std::endl;
-        	exit(1);
-    	}
+        std::cerr << "Error: Missing arguments" << std::endl;
+        exit(1);
+    }
 	// Obtaining arguments
 	int numSets = atoi(argv[1]);
 	int numBlocks = atoi(argv[2]);
@@ -177,7 +180,6 @@ int processArgs(int argc, char* argv[]) {
           		lru = false;
         	}
     	}
-
 
 
 	// Processing cache
