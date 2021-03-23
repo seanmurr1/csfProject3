@@ -4,20 +4,26 @@
  * Shelby Coe scoe4
  * Sean Murray smurra42
  */
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <stdlib.h> 
 
-#include "Set.h"
-#include "Cache.h"
+//#include <iostream>
+//#include <fstream>
+//#include <string>
+//#include <stdlib.h> 
 
-uint32_t hexAddressToDecimal (std::string hexAddress);
-bool posPowerOfTwo (int num);
-void validArgument (std::string argument, std::string option1, std::string option2);
+//#include "Set.h"
+//#include "Cache.h"
+
+#include "helper.h"
+
+//uint32_t hexAddressToDecimal (std::string hexAddress);
+//bool posPowerOfTwo (int num);
+//void validArgument (std::string argument, std::string option1, std::string option2);
 
 int main (int argc, char * argv[]) {
 
+	return processArgs(argc, argv);
+
+/*
     int numSets, numBlocks, numBytes;   // Command-line argument
     bool writeAllocate;	                // write-allocate or no-write-allocate
 	bool writeThrough;              	// write-through or write-back
@@ -114,8 +120,11 @@ int main (int argc, char * argv[]) {
     }
     cache->printSummary();
     return 0;
+*/
 }
 
+
+/*
 uint32_t hexAddressToDecimal (std::string hexAddress) {
     uint32_t binaryAddress = 0;
     int i = 0;
@@ -170,3 +179,4 @@ void validArgument (std::string argument, std::string option1, std::string optio
     }
     std::cerr << "Error: Invalid argument" << std::endl;
 }
+*/

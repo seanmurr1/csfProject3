@@ -9,11 +9,14 @@ CFLAGS = $(CONSERVATIVE_FLAGS) $(DEBUGGING_FLAGS)
 
 all: csim
 
-csim: main.o Cache.o Set.o
-	g++ -o csim main.o Cache.o Set.o -lm
+csim: main.o Cache.o Set.o helper.o
+	g++ -o csim main.o Cache.o Set.o helper.o -lm
 
-main.o: main.cpp Cache.h Set.h
+main.o: main.cpp Cache.h Set.h helper.h
 	g++ -c main.cpp $(CFLAGS)
+
+helper.o: helper.cpp helper.h Cache.h Set.h
+	g++ -c helper.cpp $(CFLAGS)
 
 Cache.o: Cache.cpp Cache.h Set.h
 	g++ -c Cache.cpp $(CFLAGS)
