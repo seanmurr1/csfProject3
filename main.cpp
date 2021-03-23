@@ -25,7 +25,8 @@ int main (int argc, char * argv[]) {
 
     if (argc < 6) {    // Might be 7 depending on if associative cache
         std::cerr << "Error: Missing arguments" << std::endl;
-        return 1;
+        exit(1);
+        //return 1;
     }
     
     numSets = atoi(argv[1]);
@@ -37,17 +38,20 @@ int main (int argc, char * argv[]) {
     // Check to see if arguments are valid
     if(!posPowerOfTwo(numSets)){  // Number of sets in cache has to be a positive power of 2
         std::cerr << "Error: Not a valid number of sets" << std::endl;
-        return 1;
+        exit(1);
+        //return 1;
     }
 
     if(!posPowerOfTwo(numBlocks)){     // Number of blocks in set has to be a positive power of 2
         std::cerr << "Error: Not a valid number of blocks" << std::endl;
-        return 1;
+        exit(1);
+        //return 1;
     }
 
     if((numBytes < 4) | !posPowerOfTwo(numBytes)){ // Number of bytes in block has to be a positive power of 2 and at least 4
         std::cerr << "Error: Not a valid number of bytes" << std::endl;
-        return 1;
+        exit(1);
+        //return 1;
     }
 
     validArgument(writeAllocateOrNot, "write-allocate", "no-write-allocate");
@@ -67,7 +71,8 @@ int main (int argc, char * argv[]) {
     // If write back and no write allocate print error message
     if (!writeAllocate & !writeThrough) {
         std::cerr << "Error: Invalid combination, if miss, data will never make it to memory" << std::endl;
-        return 1;
+        exit(1);
+        //return 1;
     }
 
     // A cache with n sets of 1 block each is direct-mapped (not associative)
