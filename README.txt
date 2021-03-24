@@ -3,18 +3,15 @@ Shelby Coe: scoe4
 Sean Murray: smurra42
 
 Part (b): Best cache, contributions
-Write back and no write allocate is not a possible combination so this is defnitely not the best overall cache configuration.
-TODO:
-Test with
-Write back and write allocate
-Write through and no write allocate
-Write through and write allocate
-and for each one should probably test direct-mapped, set-associative, and fully associative caches for each one. 
-and maybe paste the actual output for each one with the command line input? should we test with different trace files?
-Text me either way? I won't be back until late monday but if you want to lmk what you think 
-    and mb give the different cache sizes to run w each of the configurations I can run it all and finish the
-    write up?
 
+link to google sheet with data:
+https://docs.google.com/spreadsheets/d/1oFNBdT1XzQt9Xwpo-aKODD9hl1OUaJxzQdgMhDp00D4/edit?usp=sharing 
+
+Write back and no write allocate is not a possible combination so this is defnitely not the best overall cache configuration.
+
+In our tests, we ran the simulations with a fixed storage capacity of 16384 bytes (16 KB) and then varied the set associativity and write policies in order to perform thorough, consistent tests.
+Taking into account a variety of factors such as the hit rate and cycles, fully associative caches seemed to be the best. 
+However, fully associative caches are diffult to create and costly so taking simplicity into account, set associative caches are probably the best since according to the data we found, they are almost as good as fully associative caches.
 
 
 
