@@ -1,4 +1,11 @@
-// Helper funtions for main.cpp
+/*
+ * CSF Assignment 3
+ * Simulating and evaluating caches
+ * Shelby Coe scoe4
+ * Sean Murray smurra42
+ */
+ 
+/ Helper funtions for main.cpp
 
 // Includes go here:
 #include <iostream>

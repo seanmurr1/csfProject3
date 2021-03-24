@@ -15,6 +15,9 @@ Text me either way? I won't be back until late monday but if you want to lmk wha
     and mb give the different cache sizes to run w each of the configurations I can run it all and finish the
     write up?
 
+
+
+
 Contributions:
 
 Sean:
@@ -25,5 +28,7 @@ Sean:
 
 Shelby:
  - Helper class
+ - Main
+ - Cycles
  - Cache analysis
  - Debugging and refactoring

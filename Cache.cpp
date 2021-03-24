@@ -1,5 +1,11 @@
 // Cache.cpp
-
+/*
+ * CSF Assignment 3
+ * Simulating and evaluating caches
+ * Shelby Coe scoe4
+ * Sean Murray smurra42
+ */
+ 
 #include "Cache.h"
 #include <cmath>
 #include <iostream>
