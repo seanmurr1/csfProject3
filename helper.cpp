@@ -5,7 +5,7 @@
  * Sean Murray smurra42
  */
  
-/ Helper funtions for main.cpp
+// Helper funtions for main.cpp
 
 // Includes go here:
 #include <iostream>
